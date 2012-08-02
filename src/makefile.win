@@ -1,0 +1,20 @@
+CC = i586-mingw32msvc-g++
+CFLAGS = -I../build/ -DWIN32 -Dmain=SDL_main
+LDFLAGS = -L../build/SDL/ -lmingw32 -lSDLmain -lSDL -mwindows -lSDL_image -lSDL_mixer -lopengl32 
+
+exec = ../vector_space.exe
+headers = $(wildcard *.h)
+sources = $(wildcard *.cpp)
+objects = $(sources:%.cpp=../build/%.o)
+
+all: $(exec)
+
+$(exec): $(objects)
+	$(CC) -o $(exec) $(objects) $(CFLAGS) $(LDFLAGS)
+
+../build/%.o: %.cpp $(headers)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+.PHONY: clean
+clean:
+	rm -f $(objects) $(exec) 
